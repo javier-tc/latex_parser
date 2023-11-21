@@ -5,10 +5,10 @@ from lxml import etree
 from copy import copy
 
 def parse_latex(latex_file):
+    print("Parsing LaTeX file...")
     # Lee el archivo LaTeX
     with open(latex_file, 'r', encoding='utf-8') as file:
         latex_content = file.read()
-
     
     #claves
     clave_regex = r'begin{key} \w'
@@ -44,17 +44,14 @@ def parse_latex(latex_file):
     descripciones = ['' for n in range(1,66)]
     cobertura = ['' for n in range(1,66)]
     form_preg = ['' for n in range(1,66)]
+    
     #print('claves:', len(claves), ', ejes: ', len(ejes), ', conten: ', len(contenidos), ', habil:', len(habilidades), ', dif:', len(dificultades))
-    #for v,w,x,y,z in zip(claves,ejes,contenidos,habilidades, dificultades):
-        #print(v,w,x,y,z)
-    #dict_preg = dict()
-    #for n in range(len(claves)):
-        #dict_preg[n] = [claves[n],ejes[n],contenidos[n],habilidades[n], dificultades[n]]
-    #print(dict_preg)
+
     # Retorna los datos extraídos
     return [n_preg,claves,ejes,contenidos,descripciones,habilidades,cobertura, form_preg, dificultades]
 
 def write_to_excel(data, excel_file):
+    print("Writing to Excel...")
     # Crea un archivo de Excel
     temp_wb = load_workbook(excel_file, read_only=True)
     temp_ws = temp_wb.active # insert at the end (default)
@@ -105,5 +102,11 @@ if __name__ == "__main__":
 
     # Parsea el archivo LaTeX
     data = parse_latex(latex_file)
+
     # Escribe los datos en el archivo Excel
     write_to_excel(data, excel_file)
+    
+    print("Proceso completo.")
+    print("Press any key to exit")
+    input()
+    print("You pressed a key. Exiting now...")
