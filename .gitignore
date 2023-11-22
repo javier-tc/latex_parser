@@ -1,4 +1,6 @@
 *.xlsx
 *.tex
+*.spec
+
 /build
-main.spec
+/data

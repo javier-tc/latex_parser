@@ -4,6 +4,20 @@ from openpyxl import load_workbook
 from lxml import etree
 from copy import copy
 
+from tkinter import Tk, filedialog
+
+def select_latex_file():
+    root = Tk()
+    root.withdraw()  # Evita que aparezca la ventana principal
+    file_path = filedialog.askopenfilename(title="Selecciona el archivo LaTeX", filetypes=[("Archivos LaTeX", "*.tex")])
+    return file_path
+
+def select_excel_file():
+    root = Tk()
+    root.withdraw()  # Evita que aparezca la ventana principal
+    file_path = filedialog.askopenfilename(title="Selecciona la archivo Excel a usar como plantilla", filetypes=[("Archivos Excel", "*.xlsx")])
+    return file_path
+
 def parse_latex(latex_file):
     print("Parsing LaTeX file...")
     # Lee el archivo LaTeX
@@ -92,13 +106,30 @@ def write_to_excel(data, excel_file):
         adjusted_width = (max_length + 2)
         new_sheet.column_dimensions[openpyxl.utils.get_column_letter(column[0].column)].width = adjusted_width
 
-    # Guarda el nuevo archivo de Excel
-    new_workbook.save('nuevo_excel.xlsx')
-
+    # Abre una ventana para seleccionar la ubicación y el nombre del nuevo archivo Excel
+    print("Guardando nuevo archivo Excel...")
+    save_path = filedialog.asksaveasfilename(title="Guardar nuevo archivo Excel", defaultextension=".xlsx", filetypes=[("Archivos Excel", "*.xlsx")])
+    
+    # Guarda el nuevo archivo de Excel en la ubicación seleccionada
+    if save_path:
+        new_workbook.save(save_path)
+        print(f"Nuevo archivo Excel guardado en: {save_path}")
+    else:
+        print("Guardado cancelado.")
+        
 if __name__ == "__main__":
     # Especifica el archivo LaTeX y el archivo de Excel
-    latex_file = "main.tex"
-    excel_file = "HISEO-08.xlsx"
+    print("Selección de archivo LaTeX...")
+    latex_file = select_latex_file()
+    if not latex_file:
+        print("Selección de archivo LaTeX cancelada. Saliendo.")
+        exit()
+        
+    print("Selección de archivo Excel...")
+    excel_file = select_excel_file()
+    if not excel_file:
+        print("Selección de archivo Excel cancelada. Saliendo.")
+        exit()
 
     # Parsea el archivo LaTeX
     data = parse_latex(latex_file)
